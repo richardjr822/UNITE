@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/Auth/AuthenticatedSessionController.php
 
 namespace App\Http\Controllers\Auth;
 
@@ -21,6 +22,9 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Handle an incoming authentication request.
+     *
+     * Both admin and student roles land on /dashboard.
+     * DashboardController will differentiate the view by role.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -28,6 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Redirect all roles to /dashboard — role-based view logic lives in DashboardController
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

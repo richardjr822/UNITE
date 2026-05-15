@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/Auth/RegisteredUserController.php
 
 namespace App\Http\Controllers\Auth;
 
@@ -26,20 +27,24 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      *
+     * Role is always forced to 'student' — it is never accepted from user input.
+     * Admin accounts are seeded only and cannot be self-registered.
+     *
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
+            'role'     => 'student', // hardcoded — admins are seeded, never self-registered
         ]);
 
         event(new Registered($user));
