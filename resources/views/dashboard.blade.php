@@ -22,16 +22,45 @@
 
             <div class="mt-6 grid gap-4 md:grid-cols-3">
                 <article class="admin-stat-card">
-                    <p class="admin-stat-label">Events This Week</p>
-                    <p class="admin-stat-value">{{ $eventsThisWeek }}</p>
+                    <div class="flex items-center gap-4">
+                        <div class="stat-icon-wrapper stat-icon-week">
+                            <svg class="dashboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="admin-stat-label">Events This Week</p>
+                            <p class="admin-stat-value">{{ $eventsThisWeek }}</p>
+                        </div>
+                    </div>
                 </article>
+                
                 <article class="admin-stat-card">
-                    <p class="admin-stat-label">Events This Month</p>
-                    <p class="admin-stat-value">{{ $eventsThisMonth }}</p>
+                    <div class="flex items-center gap-4">
+                        <div class="stat-icon-wrapper stat-icon-month">
+                            <svg class="dashboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="admin-stat-label">Events This Month</p>
+                            <p class="admin-stat-value">{{ $eventsThisMonth }}</p>
+                        </div>
+                    </div>
                 </article>
+                
                 <article class="admin-stat-card">
-                    <p class="admin-stat-label">Scheduled Upcoming</p>
-                    <p class="admin-stat-value">{{ $upcomingEvents->count() }}</p>
+                    <div class="flex items-center gap-4">
+                        <div class="stat-icon-wrapper stat-icon-upcoming">
+                            <svg class="dashboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="admin-stat-label">Scheduled Upcoming</p>
+                            <p class="admin-stat-value">{{ $upcomingEvents->count() }}</p>
+                        </div>
+                    </div>
                 </article>
             </div>
 
@@ -41,11 +70,27 @@
                     <p class="student-kicker">Next Up</p>
                     <h3 class="student-event-title">{{ $nextEvent->title }}</h3>
                     <p class="student-event-copy">{{ $nextEvent->description }}</p>
-                    <p class="student-meta">{{ $nextEvent->date->format('D, M d, Y') }} · {{ \Illuminate\Support\Carbon::parse($nextEvent->time)->format('h:i A') }}</p>
-                    <p class="student-meta">{{ $nextEvent->venue }}</p>
-                    <div class="mt-4 flex flex-wrap gap-3">
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ $nextEvent->date->format('D, M d, Y') }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{{ \Illuminate\Support\Carbon::parse($nextEvent->time)->format('h:i A') }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        </svg>
+                        <span>{{ $nextEvent->venue }}</span>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
                         <a href="{{ route('events.show', $nextEvent) }}" class="student-event-action">View Details</a>
-                        <a href="{{ route('events.edit', $nextEvent) }}" class="rounded-full bg-[#2d8f6a] px-6 py-2 text-sm font-bold text-white shadow">Edit Event</a>
+                        <a href="{{ route('events.edit', $nextEvent) }}" class="rounded-full bg-[#2d8f6a] mt-3 px-6 py-2 text-sm font-bold text-white shadow">Edit Event</a>
                     </div>
                 </article>
             @endif
@@ -57,12 +102,40 @@
                         <article class="student-mini-card">
                             <h4 class="student-mini-title">{{ $event->title }}</h4>
                             <p class="student-event-copy">{{ \Illuminate\Support\Str::limit($event->description, 90) }}</p>
-                            <p class="student-meta">{{ $event->date->format('D, M d, Y') }} · {{ \Illuminate\Support\Carbon::parse($event->time)->format('h:i A') }}</p>
-                            <p class="student-meta">{{ $event->venue }}</p>
-                            <p class="mt-2 text-xs font-semibold text-[#2d6d58]">{{ $event->users_count }} / {{ $event->capacity }} Registered</p>
-                            <div class="mt-3 flex items-center gap-3">
-                                <a href="{{ route('events.show', $event) }}" class="student-mini-btn">View</a>
-                                <a href="{{ route('events.edit', $event) }}" class="rounded-full bg-[#dff2ea] px-4 py-1.5 text-xs font-bold text-[#1b6b50]">Edit</a>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span>{{ $event->date->format('D, M d, Y') }}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{{ \Illuminate\Support\Carbon::parse($event->time)->format('h:i A') }}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="truncate">{{ $event->venue }}</span>
+                            </div>
+                            <div class="mt-4">
+                                <div class="capacity-display">
+                                    <svg class="capacity-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    <span>{{ $event->users_count }} / {{ $event->capacity }} Registered</span>
+                                </div>
+                                <div class="event-capacity-bar">
+                                    <div class="event-capacity-fill" style="width: {{ ($event->users_count / $event->capacity) * 100 }}%"></div>
+                                </div>
+                            </div>
+                            <div class="mini-card-footer">
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('events.show', $event) }}" class="student-mini-btn">View</a>
+                                    <a href="{{ route('events.edit', $event) }}" class="rounded-full bg-[#dff2ea] px-4 py-1.5 text-xs font-bold text-[#1b6b50]">Edit</a>
+                                </div>
                             </div>
                         </article>
                     @empty
@@ -91,8 +164,24 @@
                     <p class="student-kicker">Next Up</p>
                     <h3 class="student-event-title">{{ $nextRegisteredEvent->title }}</h3>
                     <p class="student-event-copy">{{ $nextRegisteredEvent->description }}</p>
-                    <p class="student-meta">{{ $nextRegisteredEvent->date->format('D, M d, Y') }} · {{ \Illuminate\Support\Carbon::parse($nextRegisteredEvent->time)->format('h:i A') }}</p>
-                    <p class="student-meta">{{ $nextRegisteredEvent->venue }}</p>
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ $nextRegisteredEvent->date->format('D, M d, Y') }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{{ \Illuminate\Support\Carbon::parse($nextRegisteredEvent->time)->format('h:i A') }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        </svg>
+                        <span>{{ $nextRegisteredEvent->venue }}</span>
+                    </div>
                     <a href="{{ route('events.show', $nextRegisteredEvent) }}" class="student-event-action">View Details</a>
                 </article>
             @endif
@@ -104,11 +193,37 @@
                         <article class="student-mini-card">
                             <h4 class="student-mini-title">{{ $event->title }}</h4>
                             <p class="student-event-copy">{{ \Illuminate\Support\Str::limit($event->description, 90) }}</p>
-                            <p class="student-meta">{{ $event->date->format('D, M d, Y') }} · {{ \Illuminate\Support\Carbon::parse($event->time)->format('h:i A') }}</p>
-                            <p class="student-meta">{{ $event->venue }}</p>
-                            <div class="mt-3 flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold text-[#2d6d58]">{{ $event->users_count }} / {{ $event->capacity }} Registered</span>
-                                <a href="{{ route('events.show', $event) }}" class="student-mini-btn">View</a>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span>{{ $event->date->format('D, M d, Y') }}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{{ \Illuminate\Support\Carbon::parse($event->time)->format('h:i A') }}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <svg class="event-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="truncate">{{ $event->venue }}</span>
+                            </div>
+                            <div class="mt-4">
+                                <div class="capacity-display">
+                                    <svg class="capacity-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    <span>{{ $event->users_count }} / {{ $event->capacity }} Registered</span>
+                                </div>
+                                <div class="event-capacity-bar">
+                                    <div class="event-capacity-fill" style="width: {{ ($event->users_count / $event->capacity) * 100 }}%"></div>
+                                </div>
+                            </div>
+                            <div class="mini-card-footer">
+                                <a href="{{ route('events.show', $event) }}" class="student-mini-btn w-full text-center">View Event</a>
                             </div>
                         </article>
                     @empty
