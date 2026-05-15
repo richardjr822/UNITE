@@ -17,10 +17,26 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    Route::get('register/{role}', [RegisteredUserController::class, 'create'])
+        ->whereIn('role', ['admin', 'student'])
+        ->name('register.role');
+
+    Route::post('register/{role}', [RegisteredUserController::class, 'store'])
+        ->whereIn('role', ['admin', 'student'])
+        ->name('register.role.store');
+
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('login/{role}', [AuthenticatedSessionController::class, 'create'])
+        ->whereIn('role', ['admin', 'student'])
+        ->name('login.role');
+
+    Route::post('login/{role}', [AuthenticatedSessionController::class, 'store'])
+        ->whereIn('role', ['admin', 'student'])
+        ->name('login.role.store');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

@@ -1,5 +1,16 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    @php($currentRole = $role ?? 'student')
+
+    <div class="mb-4 text-sm text-gray-600">
+        Registering as: <span class="font-semibold text-gray-800">{{ ucfirst($currentRole) }}</span>
+    </div>
+
+    <div class="mb-6 flex gap-3 text-sm">
+        <a href="{{ route('register.role', 'student') }}" class="rounded-md border px-3 py-1.5 {{ $currentRole === 'student' ? 'border-emerald-600 bg-emerald-50 text-emerald-700' : 'border-gray-300 text-gray-700' }}">Student</a>
+        <a href="{{ route('register.role', 'admin') }}" class="rounded-md border px-3 py-1.5 {{ $currentRole === 'admin' ? 'border-emerald-600 bg-emerald-50 text-emerald-700' : 'border-gray-300 text-gray-700' }}">Admin</a>
+    </div>
+
+    <form method="POST" action="{{ route('register.role.store', $currentRole) }}">
         @csrf
 
         <!-- Name -->
@@ -40,7 +51,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login.role', $currentRole) }}">
                 {{ __('Already registered?') }}
             </a>
 

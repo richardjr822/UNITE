@@ -15,11 +15,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-    // block non-admins
-    if (auth()->user()->role !== 'admin') {
-        abort(403);
-    }
+        // block non-admins
+        $user = $request->user();
+        
+        if (!$user || $user->role !== 'admin') {
+            abort(403);
+        }
 
-    return $next($request);
+        return $next($request);
     }
 }

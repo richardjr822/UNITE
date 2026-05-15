@@ -11,20 +11,28 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
-    public function create(): View
+    public function create(string $role = 'student'): View
     {
-        return view('auth.login');
+        abort_unless(in_array($role, ['admin', 'student'], true), 404);
+
+        return view('auth.login', [
+            'role' => $role,
+        ]);
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, string $role = 'student'): RedirectResponse
     {
+        abort_unless(in_array($role, ['admin', 'student'], true), 404);
+
         $request->authenticate();
+
+        if ($request->user()?->role !== $role) {
+            Auth::guard('web')->logout();
+
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'This account does not belong to the selected login flow.',
+            ]);
+        }
 
         $request->session()->regenerate();
 

@@ -15,12 +15,13 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): View
+    public function create(string $role = 'student'): View
     {
-        return view('auth.register');
+        abort_unless(in_array($role, ['admin', 'student'], true), 404);
+
+        return view('auth.register', [
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -28,8 +29,10 @@ class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, string $role = 'student'): RedirectResponse
     {
+        abort_unless(in_array($role, ['admin', 'student'], true), 404);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -40,6 +43,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role,
         ]);
 
         event(new Registered($user));

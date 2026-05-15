@@ -1,58 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# UNITE - School Event Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+UNITE is a Laravel-based School Event Management System that centralizes school event announcements, student registrations, and participant tracking in a single authenticated web application.
 
-## About Laravel
+## Project Scope
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### In Scope
+- Admin event creation, editing, cancellation (status), and deletion
+- Student registration and deregistration for events
+- Participant tracking per event
+- Role-based access control (Admin vs Student)
+- Dashboard with upcoming event overview and weekly/monthly counts
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Out of Scope
+- Ticketing, QR codes, payment processing
+- Calendar sync integrations (Google Calendar, iCal)
+- Push notifications and email reminders
+- Attendance marking during event day
+- Public unauthenticated event listings
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technical Compliance
 
-## Learning Laravel
+- Framework: Laravel (latest stable in this project)
+- Database: MySQL (configured through Laravel `.env`)
+- Architecture: MVC
+- ORM: Eloquent only (no raw SQL in app logic)
+- Authentication: Laravel Breeze
+- Validation: Server-side validation applied to all event and auth forms
+- Relational modeling: Many-to-many via `event_user` pivot table
+- Migrations and seeders included
+- Git version control ready
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Core Features
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Separate auth flows by role:
+	- Student: `/login/student`, `/register/student`
+	- Admin: `/login/admin`, `/register/admin`
+- Role-protected event management routes for admin only
+- Event CRUD fields:
+	- `title`, `description`, `date`, `time`, `venue`, `capacity`, `status`
+- Student registration workflow:
+	- One-click register/unregister
+	- Duplicate registration prevention
+	- Capacity enforcement (registration blocked when full)
+- Event details page:
+	- Full event info
+	- Remaining slots
+	- Participant list visible to admins
+- Dashboard:
+	- Upcoming event cards
+	- Events this week/month
+	- Registrant counts and role-based quick actions
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Database Design Notes
 
-## Agentic Development
+### Tables
+- `users`
+	- Includes `role` enum (`admin`, `student`)
+- `events`
+	- Stores event metadata and capacity
+	- Includes `status` enum (`scheduled`, `cancelled`)
+- `event_user`
+	- Pivot table for many-to-many registration
+	- Unique composite key (`user_id`, `event_id`) for duplicate prevention
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Normalization
+- 1NF: Atomic columns and no repeating groups
+- 2NF: Non-key attributes depend on full primary keys
+- 3NF: Non-key attributes depend only on table keys, with relationship data in pivot table
+
+## Setup Instructions
+
+1. Install dependencies:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+2. Configure environment:
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Set your MySQL credentials in `.env`, then run:
 
-## Code of Conduct
+```bash
+php artisan migrate --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. Build assets:
 
-## Security Vulnerabilities
+```bash
+npm run build
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+For local development:
 
-## License
+```bash
+php artisan serve
+npm run dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Demo Accounts (Seeded)
+
+- Admin:
+	- email: `admin@example.com`
+	- password: `password`
+- Student:
+	- email: `student@example.com`
+	- password: `password`
+
+## Testing
+
+Run the test suite:
+
+```bash
+php artisan test
+```
+
+## Group Members
+
+- Add member names here
+- Add member names here
+- Add member names here
+
+## Submission Checklist
+
+- GitHub repository with full commit history
+- README with setup, features, and group members
+- Migrations and seeders included
+- Live demo prepared for final submission week
