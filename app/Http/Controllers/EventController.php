@@ -92,8 +92,12 @@ class EventController extends Controller
 
         Event::create($validated);
 
+        $redirectRoute = $request->input('redirect_to') === 'dashboard'
+            ? 'dashboard'
+            : 'events.index';
+
         return redirect()
-            ->route('events.index')
+            ->route($redirectRoute)
             ->with('status', 'Event created successfully.');
     }
 
@@ -144,8 +148,12 @@ class EventController extends Controller
 
         $event->update($validated);
 
+        $redirectRoute = $request->input('redirect_to') === 'dashboard'
+            ? 'dashboard'
+            : 'events.index';
+
         return redirect()
-            ->route('events.index')
+            ->route($redirectRoute)
             ->with('status', 'Event updated successfully.');
     }
 
@@ -196,9 +204,7 @@ class EventController extends Controller
             $user->events()->attach($event->id);
         });
 
-        return redirect()
-            ->route('events.show', $event)
-            ->with('status', 'Registration successful.');
+        return back()->with('status', 'Registration successful.');
     }
 
     public function unregister(Event $event)
@@ -209,9 +215,7 @@ class EventController extends Controller
         $user = Auth::user();
         $user->events()->detach($event->id);
 
-        return redirect()
-            ->route('events.show', $event)
-            ->with('status', 'You have been removed from this event.');
+        return back()->with('status', 'You have been removed from this event.');
     }
 
     public function registrations()

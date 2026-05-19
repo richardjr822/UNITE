@@ -7,7 +7,14 @@ use App\Http\Controllers\ProfileController;
 
 // public auth routes (login, register) already handled by Breeze
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    $events = \App\Models\Event::where('status', 'scheduled')
+        ->where('date', '>=', now()->toDateString())
+        ->withCount('users')
+        ->orderBy('date')
+        ->get();
+    return view('welcome', compact('events'));
+})->name('home');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -35,5 +42,4 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
-
 require __DIR__.'/auth.php';

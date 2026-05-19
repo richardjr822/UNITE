@@ -64,9 +64,10 @@ const setupConfirmModal = () => {
 			return;
 		}
 
-		pendingForm.dataset.confirmed = '1';
+		const formToSubmit = pendingForm;
+		formToSubmit.dataset.confirmed = '1';
 		closeModal();
-		HTMLFormElement.prototype.submit.call(pendingForm);
+		HTMLFormElement.prototype.submit.call(formToSubmit);
 	});
 
 	cancelBtn?.addEventListener('click', closeModal);

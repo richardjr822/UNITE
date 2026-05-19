@@ -14,7 +14,7 @@
 
     <style>
         :root {
-            --bg: #d7e8e2;
+            --bg: #f0f8f4;
             --ink: #0e1716;
             --muted: #66726f;
             --green-a: #55c294;
@@ -34,29 +34,108 @@
             margin: 0;
             font-family: 'Manrope', sans-serif;
             color: var(--ink);
-            background:
-                radial-gradient(circle at 8% 13%, #b4dfc5 0 18%, transparent 19%),
-                radial-gradient(circle at 82% 15%, #b1ddc1 0 17%, transparent 18%),
-                radial-gradient(circle at 62% 63%, rgba(98, 193, 145, 0.32) 0 16.5%, transparent 17%),
-                radial-gradient(circle at 96% 83%, #b5e1c8 0 15%, transparent 16%),
-                linear-gradient(145deg, var(--bg) 0%, #d2e6de 100%);
+            background: linear-gradient(145deg, var(--bg) 0%, #e4f3ec 100%);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        .bg-circles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.55;
+            filter: blur(8px);
+        }
+
+        .bg-circle-1 {
+            width: 38vw; height: 38vw;
+            left: -8vw; top: -6vw;
+            background: radial-gradient(circle at 40% 40%, #b4dfc5, #c8ead7);
+            animation: floatA 9s ease-in-out infinite;
+        }
+
+        .bg-circle-2 {
+            width: 34vw; height: 34vw;
+            right: -6vw; top: -4vw;
+            background: radial-gradient(circle at 60% 40%, #b1ddc1, #c5e8d3);
+            animation: floatB 11s ease-in-out infinite;
+        }
+
+        .bg-circle-3 {
+            width: 28vw; height: 28vw;
+            left: 50vw; top: 45vw;
+            background: radial-gradient(circle at 50% 50%, rgba(98,193,145,0.55), transparent);
+            animation: floatC 13s ease-in-out infinite;
+        }
+
+        .bg-circle-4 {
+            width: 26vw; height: 26vw;
+            right: -4vw; bottom: -4vw;
+            background: radial-gradient(circle at 60% 60%, #b5e1c8, #c8ead7);
+            animation: floatA 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatA {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%       { transform: translate(8%, 10%) scale(1.06); }
+            66%       { transform: translate(-6%, 5%) scale(0.95); }
+        }
+
+        @keyframes floatB {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            40%       { transform: translate(-10%, 8%) scale(1.07); }
+            70%       { transform: translate(6%, -6%) scale(0.94); }
+        }
+
+        @keyframes floatC {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%       { transform: translate(-8%, -10%) scale(1.08); }
         }
 
         .scene {
             width: min(calc(var(--base-width) * 1px * var(--scale)), calc(100vw - 24px));
             margin: 0 auto;
             position: relative;
+            z-index: 1;
             padding-top: calc(22px * var(--scale));
             padding-bottom: calc(34px * var(--scale));
+            overflow: visible;
         }
+
+        .nav-signin {
+            position: fixed;
+            top: 14px;
+            right: 20px;
+            z-index: 100;
+            padding: 8px 22px;
+            border-radius: 999px;
+            background: linear-gradient(120deg, var(--green-a) 0%, #39a885 52%, var(--green-b) 100%);
+            color: #f3fffb;
+            font-family: 'Manrope', sans-serif;
+            font-size: .875rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(34,125,93,0.28);
+            transition: opacity .15s;
+        }
+
+        .nav-signin:hover { opacity: .88; }
 
         .brand {
             display: inline-flex;
             align-items: center;
             gap: calc(8px * var(--scale));
-            margin-left: calc(16px * var(--scale));
+            position: fixed;
+            top: 18px;
+            left: 20px;
+            z-index: 100;
             font-size: calc(26px * var(--scale));
             font-weight: 800;
             letter-spacing: -0.01em;
@@ -74,17 +153,22 @@
 
         .hero {
             text-align: center;
-            margin-top: calc(44px * var(--scale));
+            margin-top: calc(80px * var(--scale));
+            margin-bottom: 0;
+            padding-top: calc(48px * var(--scale));
+            padding-bottom: calc(8px * var(--scale));
             position: relative;
             z-index: 2;
         }
 
         .headline {
-            margin: 0;
-            font-size: calc(60px * var(--scale));
+            margin: 0 auto;
+            font-size: calc(80px * var(--scale));
             font-weight: 800;
             letter-spacing: -0.03em;
             line-height: 1.08;
+            text-align: center;
+            width: max-content;
         }
 
         .headline .accent {
@@ -121,36 +205,30 @@
         .cta-arrow {
             display: inline-flex;
             align-items: center;
-            gap: calc(8px * var(--scale));
-            font-size: calc(16px * var(--scale));
-            line-height: 1;
         }
 
-        .cta-arrow::before {
-            content: '';
-            width: calc(42px * var(--scale));
-            height: calc(2px * var(--scale));
-            background: rgba(238, 252, 247, 0.92);
-            border-radius: 99px;
-        }
+        .cta-arrow::before { content: none; }
 
-        .organic {
-            position: absolute;
-            left: 50%;
-            top: calc(253px * var(--scale));
-            transform: translateX(-50%);
-            width: calc(470px * var(--scale));
-            height: calc(126px * var(--scale));
-            background: rgba(235, 247, 242, 0.85);
-            border-radius: 56% 44% 54% 46% / 58% 42% 58% 42%;
-            filter: blur(calc(0.2px * var(--scale)));
-            z-index: 1;
-        }
+        .organic { display: none; }
 
         .events-wrap {
             margin-top: calc(80px * var(--scale));
+            margin-bottom: calc(60px * var(--scale));
             position: relative;
             z-index: 2;
+            width: min(90vw, 1080px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .events-section-label {
+            text-align: center;
+            font-size: calc(13px * var(--scale));
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green-c);
+            margin-bottom: calc(18px * var(--scale));
         }
 
         .events-panel {
@@ -182,10 +260,16 @@
 
         .events-grid {
             padding: calc(18px * var(--scale)) calc(26px * var(--scale)) calc(20px * var(--scale));
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            display: flex;
+            flex-direction: row;
             gap: calc(16px * var(--scale));
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(47,157,120,0.35) transparent;
         }
+
+        .events-grid::-webkit-scrollbar { height: 4px; }
+        .events-grid::-webkit-scrollbar-thumb { background: rgba(47,157,120,0.35); border-radius: 4px; }
 
         .event-card {
             border: 2px solid #d8dbd9;
@@ -193,6 +277,8 @@
             border-radius: calc(18px * var(--scale));
             padding: calc(10px * var(--scale)) calc(12px * var(--scale)) calc(11px * var(--scale));
             min-height: calc(108px * var(--scale));
+            flex: 0 0 calc(220px * var(--scale));
+            min-width: calc(180px * var(--scale));
         }
 
         .event-top {
@@ -240,8 +326,17 @@
             background: #2f8e6f;
         }
 
+        .features-wrap {
+            position: relative;
+            z-index: 2;
+            width: min(90vw, 1080px);
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: calc(24px * var(--scale));
+            margin-bottom: calc(24px * var(--scale));
+        }
+
         .feature-grid {
-            margin-top: calc(40px * var(--scale));
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: calc(15px * var(--scale));
@@ -268,6 +363,90 @@
             font-size: calc(11px * var(--scale));
             line-height: 1.35;
             font-weight: 500;
+        }
+
+        .faq-wrap {
+            position: relative;
+            z-index: 2;
+            width: min(90vw, 1080px);
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: calc(32px * var(--scale));
+            margin-bottom: calc(48px * var(--scale));
+        }
+
+        .faq-label {
+            text-align: center;
+            font-size: calc(13px * var(--scale));
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green-c);
+            margin-bottom: calc(18px * var(--scale));
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: calc(10px * var(--scale));
+        }
+
+        .faq-item {
+            border-radius: calc(16px * var(--scale));
+            background: rgba(249, 250, 250, .9);
+            border: 1px solid rgba(255, 255, 255, .75);
+            box-shadow: 0 calc(8px * var(--scale)) calc(18px * var(--scale)) rgba(44, 113, 88, 0.13);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: calc(16px * var(--scale)) calc(22px * var(--scale));
+            font-family: inherit;
+            font-size: calc(13px * var(--scale));
+            font-weight: 700;
+            color: #1e3a2e;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: calc(12px * var(--scale));
+        }
+
+        .faq-question .faq-icon {
+            flex-shrink: 0;
+            width: calc(18px * var(--scale));
+            height: calc(18px * var(--scale));
+            border-radius: 50%;
+            background: #d4efe4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(14px * var(--scale));
+            line-height: 1;
+            color: #2a8a6b;
+            transition: transform 0.25s ease;
+        }
+
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 calc(22px * var(--scale));
+            color: #767f7d;
+            font-size: calc(12px * var(--scale));
+            line-height: 1.55;
+            font-weight: 500;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding: 0 calc(22px * var(--scale)) calc(16px * var(--scale));
         }
 
         .site-footer {
@@ -301,8 +480,7 @@
             }
 
             .brand {
-                margin-left: 6px;
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
 
             .hero {
@@ -357,7 +535,6 @@
             }
 
             .events-grid {
-                grid-template-columns: 1fr;
                 padding: 14px 14px 16px;
                 gap: 11px;
             }
@@ -366,6 +543,8 @@
                 border-radius: 16px;
                 padding: 12px 12px 11px;
                 min-height: 108px;
+                flex: 0 0 200px;
+                min-width: 200px;
             }
 
             .event-top {
@@ -422,16 +601,23 @@
     </style>
 </head>
 <body>
-    <div class="scene">
-        <a class="brand" href="{{ url('/') }}" aria-label="UNITE home">
-            <span class="brand-dot"></span>
-            <span>UNITE</span>
-        </a>
+    <div class="bg-circles" aria-hidden="true">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        <div class="bg-circle bg-circle-3"></div>
+        <div class="bg-circle bg-circle-4"></div>
+    </div>
+    <a class="brand" href="{{ url('/') }}" aria-label="UNITE home">
+        <span class="brand-dot"></span>
+        <span>UNITE</span>
+    </a>
+    <a class="nav-signin" href="{{ route('login') }}">Sign In</a>
 
+    <div class="scene">
         <section class="hero">
             <h1 class="headline">
-                Every campus event,<br>
-                <span class="accent">organized</span> in one place.
+                <span style="display:block;white-space:nowrap;">Every campus event,</span>
+                <span style="display:block;white-space:nowrap;"><span class="accent">organized</span> in one place.</span>
             </h1>
             <p class="sub">
                 A modern platform for faculty to publish events and for students to discover
@@ -439,50 +625,38 @@
             </p>
             <a class="cta" href="{{ route('login') }}">
                 Get Started
-                <span class="cta-arrow">&#8594;</span>
+                <span class="cta-arrow"><svg width="52" height="18" viewBox="0 0 52 18" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="9" x2="44" y2="9" stroke="rgba(238,252,247,0.9)" stroke-width="2.2" stroke-linecap="round"/><polyline points="36,2 44,9 36,16" stroke="rgba(238,252,247,0.9)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
             </a>
         </section>
 
         <div class="organic" aria-hidden="true"></div>
+    </div>
 
-        <div class="events-wrap">
-            <section class="events-panel" aria-label="Upcoming events preview">
-                <div class="events-header">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-                <div class="events-grid">
-                    <article class="event-card">
-                        <div class="event-top">
-                            <div class="date-pill">MAY<br>20</div>
-                            <span>Function Hall</span>
-                        </div>
-                        <h3 class="event-title">Inter-College Hackathon</h3>
-                        <div class="event-progress"><span style="width: 61%"></span></div>
-                    </article>
+    <div class="events-wrap">
+        <p class="events-section-label">Upcoming Events</p>
+        <section class="events-panel" aria-label="Upcoming events preview">
+            <div class="events-header">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <div class="events-grid">
+                @forelse ($events as $event)
+                <article class="event-card">
+                    <div class="event-top">
+                        <div class="date-pill">{{ strtoupper(\Carbon\Carbon::parse($event->date)->format('M')) }}<br>{{ \Carbon\Carbon::parse($event->date)->format('d') }}</div>
+                        <span>{{ $event->venue }}</span>
+                    </div>
+                    <h3 class="event-title">{{ $event->title }}</h3>
+                </article>
+                @empty
+                <p style="padding: 16px; color: #9ba19f; font-size: .85rem;">No upcoming events.</p>
+                @endforelse
+            </div>
+        </section>
+    </div>
 
-                    <article class="event-card">
-                        <div class="event-top">
-                            <div class="date-pill">MAY<br>21</div>
-                            <span>PE Hall</span>
-                        </div>
-                        <h3 class="event-title">Annual Science Fair</h3>
-                        <div class="event-progress"><span style="width: 30%"></span></div>
-                    </article>
-
-                    <article class="event-card">
-                        <div class="event-top">
-                            <div class="date-pill">MAY<br>22</div>
-                            <span>Room 518</span>
-                        </div>
-                        <h3 class="event-title">Cultural Night</h3>
-                        <div class="event-progress"><span style="width: 81%"></span></div>
-                    </article>
-                </div>
-            </section>
-        </div>
-
+    <div class="features-wrap">
         <section class="feature-grid" aria-label="Platform highlights">
             <article class="feature">
                 <h3>Admin</h3>
@@ -499,11 +673,61 @@
         </section>
     </div>
 
+    <div class="faq-wrap">
+        <p class="faq-label">FAQs</p>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Who can use UNITE?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">UNITE is open to all enrolled students and faculty staff of the campus. Students can browse and register for events, while authorized faculty members can create and manage them.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    How do I register for an event?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">Sign in with your student account, browse the upcoming events, and click Register on any event you want to join. You'll receive a confirmation and can manage your registrations from your dashboard.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Can I cancel my registration?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">Yes. Visit your dashboard, find the event under My Registrations, and click Cancel. Spots are released immediately so other students can join.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    What happens if an event is full?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">Once an event reaches its capacity limit, registration is automatically closed. Keep an eye on the events panel — new events are added regularly.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    How do admins create an event?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">Log in with an admin account, go to the Events section of your dashboard, and click Create Event. Fill in the title, date, venue, and capacity, then publish it for students to see.</div>
+            </div>
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="inner">
             <span>&copy; UNITE</span>
             <span>School Event Management System</span>
         </div>
     </footer>
+
+    <script>
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+    </script>
 </body>
 </html>

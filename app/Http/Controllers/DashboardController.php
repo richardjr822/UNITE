@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         /** @var User $user */
         $user = Auth::user();
@@ -56,6 +57,7 @@ class DashboardController extends Controller
             'isAdmin' => $user->role === 'admin',
             'registeredEvents' => $registeredEvents,
             'nextRegisteredEvent' => $nextRegisteredEvent,
+            'registeredEventIds' => $registeredEvents->pluck('id')->all(),
         ]);
     }
 }

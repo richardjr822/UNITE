@@ -62,7 +62,6 @@
                                 @method('DELETE')
                                 <button type="submit" class="rounded-full bg-amber-600 px-5 py-1.5 text-xs font-bold text-white">Unregister</button>
                             </form>
-                            <a href="{{ route('events.show', $event) }}" class="student-mini-btn">View Details</a>
                         </div>
                     </div>
                 </article>

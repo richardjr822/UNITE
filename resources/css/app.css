@@ -196,6 +196,34 @@
 		@apply text-3xl font-extrabold leading-tight text-[#121f1c];
 	}
 
+	/* Dashboard-only horizontal scroll event cards */
+	.dashboard-event-grid {
+		@apply flex flex-row gap-4 overflow-x-auto pb-2;
+		scrollbar-width: thin;
+		scrollbar-color: rgba(80,190,141,0.4) transparent;
+	}
+
+	.dashboard-event-grid::-webkit-scrollbar {
+		height: 4px;
+	}
+
+	.dashboard-event-grid::-webkit-scrollbar-thumb {
+		background: rgba(80,190,141,0.4);
+		border-radius: 4px;
+	}
+
+	.dashboard-event-card {
+		@apply flex flex-col rounded-2xl bg-white p-4;
+		box-shadow: 0 4px 16px rgba(23, 75, 59, 0.10);
+		flex: 0 0 260px;
+		min-width: 260px;
+		height: 320px;
+	}
+
+	.dashboard-event-title {
+		@apply text-lg font-extrabold leading-tight text-[#121f1c];
+	}
+
 	.student-mini-btn {
 		@apply rounded-full bg-gradient-to-r from-[#50be8d] to-[#26835f] px-5 py-1.5 text-xs font-bold text-white shadow;
 	}

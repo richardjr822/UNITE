@@ -35,16 +35,73 @@
             min-height: 100vh;
             font-family: 'Manrope', sans-serif;
             color: var(--ink-900);
-            background:
-                radial-gradient(circle at 12% 22%, rgba(138, 214, 173, 0.42) 0 28%, transparent 29%),
-                radial-gradient(circle at 76% 14%, rgba(95, 189, 144, 0.34) 0 24%, transparent 25%),
-                radial-gradient(circle at 84% 88%, rgba(93, 186, 140, 0.33) 0 20%, transparent 21%),
-                linear-gradient(135deg, var(--mint-050), #deefe6 45%, #d7ebe2 100%);
+            background: linear-gradient(145deg, #f0f8f4 0%, #e4f3ec 100%);
             overflow-x: hidden;
+        }
+
+        .bg-circles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.55;
+            filter: blur(8px);
+        }
+
+        .bg-circle-1 {
+            width: 38vw; height: 38vw;
+            left: -8vw; top: -6vw;
+            background: radial-gradient(circle at 40% 40%, #b4dfc5, #c8ead7);
+            animation: floatA 9s ease-in-out infinite;
+        }
+
+        .bg-circle-2 {
+            width: 34vw; height: 34vw;
+            right: -6vw; top: -4vw;
+            background: radial-gradient(circle at 60% 40%, #b1ddc1, #c5e8d3);
+            animation: floatB 11s ease-in-out infinite;
+        }
+
+        .bg-circle-3 {
+            width: 28vw; height: 28vw;
+            left: 50vw; top: 45vw;
+            background: radial-gradient(circle at 50% 50%, rgba(98,193,145,0.55), transparent);
+            animation: floatC 13s ease-in-out infinite;
+        }
+
+        .bg-circle-4 {
+            width: 26vw; height: 26vw;
+            right: -4vw; bottom: -4vw;
+            background: radial-gradient(circle at 60% 60%, #b5e1c8, #c8ead7);
+            animation: floatA 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatA {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%       { transform: translate(8%, 10%) scale(1.06); }
+            66%       { transform: translate(-6%, 5%) scale(0.95); }
+        }
+
+        @keyframes floatB {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            40%       { transform: translate(-10%, 8%) scale(1.07); }
+            70%       { transform: translate(6%, -6%) scale(0.94); }
+        }
+
+        @keyframes floatC {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%       { transform: translate(-8%, -10%) scale(1.08); }
         }
 
         .login-shell {
             position: relative;
+            z-index: 1;
             min-height: 100vh;
             display: grid;
             place-items: center;
@@ -294,13 +351,19 @@
     </style>
 </head>
 <body>
+<div class="bg-circles" aria-hidden="true">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+    <div class="bg-circle bg-circle-4"></div>
+</div>
 @php($currentRole = $role ?? 'student')
 <main class="login-shell">
     <section class="login-layout">
         <div class="brand-block" aria-hidden="true">
             <div class="brand-row">
                 <span class="brand-dot"></span>
-                <h1 class="brand-title">UNITE</h1>
+                <a href="{{ route('home') }}" style="text-decoration:none;color:inherit;"><h1 class="brand-title">UNITE</h1></a>
             </div>
 
             <h2 class="hero-title">Welcome to your campus events hub.</h2>
@@ -317,8 +380,8 @@
             <h3 class="card-title">Sign In</h3>
 
             <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
-                <a href="{{ route('login.role', 'student') }}" style="padding:6px 12px;border-radius:999px;border:1px solid {{ $currentRole === 'student' ? '#2f9c75' : '#9ca3af' }};background:{{ $currentRole === 'student' ? 'rgba(58,161,114,.12)' : 'transparent' }};color:#1f2937;font-size:.8rem;font-weight:600;text-decoration:none;">Student</a>
-                <a href="{{ route('login.role', 'admin') }}" style="padding:6px 12px;border-radius:999px;border:1px solid {{ $currentRole === 'admin' ? '#2f9c75' : '#9ca3af' }};background:{{ $currentRole === 'admin' ? 'rgba(58,161,114,.12)' : 'transparent' }};color:#1f2937;font-size:.8rem;font-weight:600;text-decoration:none;">Admin</a>
+                <button type="button" id="tab-student" onclick="switchRole('student')" style="padding:6px 12px;border-radius:999px;border:1px solid {{ $currentRole === 'student' ? '#2f9c75' : '#9ca3af' }};background:{{ $currentRole === 'student' ? 'rgba(58,161,114,.12)' : 'transparent' }};color:#1f2937;font-size:.8rem;font-weight:600;cursor:pointer;">Student</button>
+                <button type="button" id="tab-admin" onclick="switchRole('admin')" style="padding:6px 12px;border-radius:999px;border:1px solid {{ $currentRole === 'admin' ? '#2f9c75' : '#9ca3af' }};background:{{ $currentRole === 'admin' ? 'rgba(58,161,114,.12)' : 'transparent' }};color:#1f2937;font-size:.8rem;font-weight:600;cursor:pointer;">Admin</button>
             </div>
 
             @if (session('status'))
@@ -335,7 +398,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login.role.store', $currentRole) }}">
+            <form id="login-form" method="POST" action="{{ route('login.role.store', $currentRole) }}">
                 @csrf
 
                 <div class="field-wrap">
@@ -352,7 +415,7 @@
                     >
                 </div>
 
-                <div class="field-wrap">
+                <div class="field-wrap" style="position:relative;">
                     <input
                         id="password"
                         class="field"
@@ -361,25 +424,58 @@
                         placeholder="password"
                         required
                         autocomplete="current-password"
+                        style="padding-right:48px;"
                     >
+                    <button type="button" onclick="togglePassword()" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#4d7a6a;padding:0;" aria-label="Toggle password visibility">
+                        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
                 </div>
-
-                @if (Route::has('password.request'))
-                    <a class="inline-link" href="{{ route('password.request') }}">forgot password</a>
-                @endif
 
                 <div class="submit-wrap">
                     <button class="submit-btn" type="submit">Continue</button>
                 </div>
-
-                @if (Route::has('register'))
-                    <p class="register-row">
-                        New here? <a href="{{ route('register.role', $currentRole) }}">Create an account</a>
-                    </p>
-                @endif
             </form>
         </div>
     </section>
 </main>
+<script>
+    const routes = {
+        student: {
+            store: '{{ route('login.role.store', 'student') }}'
+        },
+        admin: {
+            store: '{{ route('login.role.store', 'admin') }}'
+        }
+    };
+
+    function switchRole(role) {
+        const other = role === 'student' ? 'admin' : 'student';
+        const active = { border: '1px solid #2f9c75', background: 'rgba(58,161,114,.12)' };
+        const inactive = { border: '1px solid #9ca3af', background: 'transparent' };
+
+        const tabActive = document.getElementById('tab-' + role);
+        const tabInactive = document.getElementById('tab-' + other);
+
+        Object.assign(tabActive.style, active);
+        Object.assign(tabInactive.style, inactive);
+
+        document.getElementById('login-form').action = routes[role].store;
+    }
+
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.getElementById('eye-icon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        } else {
+            input.type = 'password';
+            icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+    }
+</script>
 </body>
 </html>
