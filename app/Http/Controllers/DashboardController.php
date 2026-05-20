@@ -21,6 +21,14 @@ class DashboardController extends Controller
             ->orderBy('time')
             ->get();
 
+        $upcomingEventsPaged = Event::query()
+            ->upcoming()
+            ->withCount('users')
+            ->orderBy('date')
+            ->orderBy('time')
+            ->paginate(6)
+            ->withQueryString();
+
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $startOfMonth = now()->startOfMonth();
@@ -52,6 +60,7 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'upcomingEvents' => $upcomingEvents,
+            'upcomingEventsPaged' => $upcomingEventsPaged,
             'eventsThisWeek' => $eventsThisWeek,
             'eventsThisMonth' => $eventsThisMonth,
             'isAdmin' => $user->role === 'admin',

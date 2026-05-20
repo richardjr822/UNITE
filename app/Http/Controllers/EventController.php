@@ -39,14 +39,16 @@ class EventController extends Controller
         } elseif ($statusFilter === 'done') {
             $eventQuery->where(function ($query) use ($today): void {
                 $query->whereDate('date', '<', $today)
-                    ->orWhere('status', 'cancelled');
+                    ->orWhere('status', 'cancelled')
+                    ->orWhere('status', 'done');
             });
         }
 
         $events = $eventQuery
             ->orderBy('date')
             ->orderBy('time')
-            ->get();
+            ->paginate(6)
+            ->withQueryString();
 
         $upcomingEvents = Event::query()
             ->upcoming()
@@ -108,12 +110,25 @@ class EventController extends Controller
 
         $event->loadCount('users');
 
+        $participants = collect();
+        $participantSearch = '';
+
         if ($currentUser->role === 'admin') {
-            $event->load(['users' => function ($query): void {
-                $query->select('users.id', 'users.name', 'users.email')
-                    ->withPivot('created_at')
-                    ->orderByPivot('created_at', 'asc');
-            }]);
+            $participantSearch = trim((string) request('participant', ''));
+
+            $participantsQuery = $event->users()
+                ->select('users.id', 'users.name', 'users.email')
+                ->withPivot('created_at')
+                ->orderByPivot('created_at', 'asc');
+
+            if ($participantSearch !== '') {
+                $participantsQuery->where(function ($q) use ($participantSearch): void {
+                    $q->where('users.name', 'like', '%'.$participantSearch.'%')
+                        ->orWhere('users.email', 'like', '%'.$participantSearch.'%');
+                });
+            }
+
+            $participants = $participantsQuery->paginate(10)->withQueryString();
         }
 
         $alreadyRegistered = $currentUser->events()
@@ -124,12 +139,18 @@ class EventController extends Controller
             'event' => $event,
             'alreadyRegistered' => $alreadyRegistered,
             'isAdmin' => $currentUser->role === 'admin',
+            'participants' => $participants,
+            'participantSearch' => $participantSearch,
         ]);
     }
 
     public function edit(Event $event)
     {
         $this->ensureAdmin();
+
+        if ($event->status === 'done') {
+            return redirect()->route('events.show', $event)->with('status', 'Done events cannot be edited.');
+        }
 
         return view('events.edit', [
             'event' => $event,
@@ -139,6 +160,8 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $this->ensureAdmin();
+
+        abort_if($event->status === 'done', 403, 'Done events cannot be edited.');
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -252,20 +275,31 @@ class EventController extends Controller
         } elseif ($statusFilter === 'done') {
             $query->where(function ($subQuery) use ($today): void {
                 $subQuery->whereDate('date', '<', $today)
-                    ->orWhere('status', 'cancelled');
+                    ->orWhere('status', 'cancelled')
+                    ->orWhere('status', 'done');
             });
         }
 
         $registrations = $query
             ->orderBy('date')
             ->orderBy('time')
-            ->get();
+            ->paginate(6)
+            ->withQueryString();
 
         return view('events.registrations', [
             'registrations' => $registrations,
             'search' => $search,
             'statusFilter' => $statusFilter,
         ]);
+    }
+
+    public function markDone(Event $event)
+    {
+        $this->ensureAdmin();
+
+        $event->update(['status' => 'done']);
+
+        return redirect()->back()->with('status', 'Event marked as done.');
     }
 
     private function ensureAdmin(): void

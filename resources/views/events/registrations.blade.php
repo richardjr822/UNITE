@@ -128,6 +128,40 @@
                 </div>
             @endforelse
         </div>
+        @if ($registrations->hasPages())
+            <div class="mt-5 flex items-center justify-between gap-4">
+                <p class="text-sm text-white/70">
+                    Showing {{ $registrations->firstItem() }}–{{ $registrations->lastItem() }} of {{ $registrations->total() }} events
+                </p>
+                <div class="flex items-center gap-1">
+                    @if ($registrations->onFirstPage())
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-white/30 cursor-not-allowed">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </span>
+                    @else
+                        <a href="{{ $registrations->previousPageUrl() }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 border border-white/30 text-white hover:bg-white/20 transition">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </a>
+                    @endif
+                    @foreach ($registrations->getUrlRange(max(1, $registrations->currentPage() - 2), min($registrations->lastPage(), $registrations->currentPage() + 2)) as $page => $url)
+                        @if ($page === $registrations->currentPage())
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white text-xs font-bold text-[#1f4f3f]">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 border border-white/30 text-xs font-semibold text-white hover:bg-white/20 transition">{{ $page }}</a>
+                        @endif
+                    @endforeach
+                    @if ($registrations->hasMorePages())
+                        <a href="{{ $registrations->nextPageUrl() }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 border border-white/30 text-white hover:bg-white/20 transition">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    @else
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-white/30 cursor-not-allowed">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </section>
 
     {{-- Student View Event Modal --}}

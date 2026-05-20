@@ -32,7 +32,11 @@
                         <p class="featured-event-description">{{ $event->description }}</p>
                     </div>
                     <div class="featured-event-badge">
-                        <span class="inline-flex rounded-full px-4 py-2 text-sm font-bold {{ $event->status === 'scheduled' ? 'bg-[#e8f5ee] text-[#2f9b74]' : 'bg-amber-100 text-amber-700' }}">
+                        <span class="inline-flex rounded-full px-4 py-2 text-sm font-bold
+                            @if ($event->status === 'scheduled') bg-[#e8f5ee] text-[#2f9b74]
+                            @elseif ($event->status === 'done') bg-slate-100 text-slate-600
+                            @else bg-amber-100 text-amber-700
+                            @endif">
                             {{ ucfirst($event->status) }}
                         </span>
                     </div>
@@ -108,12 +112,26 @@
                     </a>
 
                     @if ($isAdmin)
-                        <a href="{{ route('events.edit', $event) }}" class="featured-event-btn featured-event-btn-primary">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Edit Event
-                        </a>
+                        @if ($event->status !== 'done')
+                            <a href="{{ route('events.edit', $event) }}" class="featured-event-btn featured-event-btn-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Edit Event
+                            </a>
+                        @endif
+                        @if ($event->date->isToday() && $event->status === 'scheduled')
+                            <form method="POST" action="{{ route('events.markDone', $event) }}" data-confirm-submit data-confirm-title="Mark as Done" data-confirm-message="Mark '{{ $event->title }}' as done? This cannot be undone." class="contents">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="featured-event-btn bg-blue-600 text-white shadow-md hover:bg-blue-700">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Mark as Done
+                                </button>
+                            </form>
+                        @endif
                     @else
                         @if ($event->status !== 'scheduled' || $event->date->isPast())
                             <span class="inline-flex items-center justify-center rounded-xl bg-[#f0f4f2] px-6 py-3 font-semibold text-[#5f746d]">
@@ -158,7 +176,7 @@
             @if ($isAdmin)
                 <!-- Participants Section -->
                 <article class="rounded-2xl border border-[#d6e5df] bg-white p-6 md:p-8 shadow">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center justify-between mb-5">
                         <h2 class="text-2xl font-bold text-[#112a21] flex items-center gap-2">
                             <svg class="h-6 w-6 text-[#2f9b74]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0zM6 20h12v-2a4 4 0 00-8 0v2z" />
@@ -173,12 +191,36 @@
                         </span>
                     </div>
 
-                    @if ($event->users->isEmpty())
+                    <!-- Participant Search Bar -->
+                    <form method="GET" action="{{ route('events.show', $event) }}" class="mb-5">
+                        <div class="relative">
+                            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                                <svg class="h-4 w-4 text-[#8aab9e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input
+                                type="search"
+                                name="participant"
+                                value="{{ $participantSearch }}"
+                                placeholder="Search by name or email…"
+                                class="w-full rounded-xl border border-[#d6e5df] bg-[#f8fdfb] py-2.5 pl-9 pr-4 text-sm text-[#1b3a2f] placeholder-[#8aab9e] focus:border-[#2f9b74] focus:outline-none focus:ring-2 focus:ring-[#2f9b74]/20"
+                            >
+                        </div>
+                    </form>
+
+                    @if ($participants->isEmpty())
                         <div class="py-8 text-center">
                             <svg class="mx-auto h-12 w-12 text-[#b0cfc1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0zM6 20h12v-2a4 4 0 00-8 0v2z" />
                             </svg>
-                            <p class="mt-4 text-sm text-[#5f746d]">No participants registered yet.</p>
+                            <p class="mt-4 text-sm text-[#5f746d]">
+                                @if ($participantSearch !== '')
+                                    No participants match "{{ $participantSearch }}".
+                                @else
+                                    No participants registered yet.
+                                @endif
+                            </p>
                         </div>
                     @else
                         <div class="overflow-x-auto">
@@ -192,9 +234,9 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[#e8f4ee]">
-                                    @foreach ($event->users as $i => $participant)
+                                    @foreach ($participants as $participant)
                                         <tr class="hover:bg-[#f8fdfb] transition-colors">
-                                            <td class="px-6 py-4 text-sm text-[#8aab9e]">{{ $i + 1 }}</td>
+                                            <td class="px-6 py-4 text-sm text-[#8aab9e]">{{ $participants->firstItem() + $loop->index }}</td>
                                             <td class="px-6 py-4 text-sm font-semibold text-[#1b3a2f]">{{ $participant->name }}</td>
                                             <td class="px-6 py-4 text-sm text-[#385e52]">{{ $participant->email }}</td>
                                             <td class="px-6 py-4 text-sm text-[#385e52]">{{ $participant->pivot->created_at?->format('M d, Y h:i A') ?? '—' }}</td>
@@ -203,6 +245,46 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        @if ($participants->hasPages())
+                            <div class="mt-5 flex items-center justify-between gap-4">
+                                <p class="text-xs text-[#5f746d]">
+                                    Showing {{ $participants->firstItem() }}–{{ $participants->lastItem() }} of {{ $participants->total() }} participants
+                                </p>
+                                <div class="flex items-center gap-1">
+                                    {{-- Previous --}}
+                                    @if ($participants->onFirstPage())
+                                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#b0cfc1] cursor-not-allowed">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                        </span>
+                                    @else
+                                        <a href="{{ $participants->previousPageUrl() }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#d6e5df] text-[#2f9b74] hover:bg-[#e8f5ee] transition">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                        </a>
+                                    @endif
+
+                                    {{-- Page numbers --}}
+                                    @foreach ($participants->getUrlRange(max(1, $participants->currentPage() - 2), min($participants->lastPage(), $participants->currentPage() + 2)) as $page => $url)
+                                        @if ($page === $participants->currentPage())
+                                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#2f9b74] text-xs font-bold text-white">{{ $page }}</span>
+                                        @else
+                                            <a href="{{ $url }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#d6e5df] text-xs font-semibold text-[#385e52] hover:bg-[#e8f5ee] transition">{{ $page }}</a>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next --}}
+                                    @if ($participants->hasMorePages())
+                                        <a href="{{ $participants->nextPageUrl() }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#d6e5df] text-[#2f9b74] hover:bg-[#e8f5ee] transition">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                        </a>
+                                    @else
+                                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#b0cfc1] cursor-not-allowed">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 </article>
             @endif
