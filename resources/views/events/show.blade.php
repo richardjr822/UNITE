@@ -158,12 +158,20 @@
             @if ($isAdmin)
                 <!-- Participants Section -->
                 <article class="rounded-2xl border border-[#d6e5df] bg-white p-6 md:p-8 shadow">
-                    <h2 class="text-2xl font-bold text-[#112a21] mb-6 flex items-center gap-2">
-                        <svg class="h-6 w-6 text-[#2f9b74]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0zM6 20h12v-2a4 4 0 00-8 0v2z" />
-                        </svg>
-                        Registered Participants
-                    </h2>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-[#112a21] flex items-center gap-2">
+                            <svg class="h-6 w-6 text-[#2f9b74]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0zM6 20h12v-2a4 4 0 00-8 0v2z" />
+                            </svg>
+                            Registered Participants
+                        </h2>
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e8f5ee] px-3 py-1 text-sm font-bold text-[#2f9b74]">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M9 20H4v-2a3 3 0 015.856-1.487M15 7a4 4 0 11-8 0 4 4 0 018 0zm6 3a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {{ $event->users_count }} / {{ $event->capacity }}
+                        </span>
+                    </div>
 
                     @if ($event->users->isEmpty())
                         <div class="py-8 text-center">
@@ -177,15 +185,19 @@
                             <table class="min-w-full divide-y divide-[#e8f4ee]">
                                 <thead>
                                     <tr class="bg-[#f3faf6]">
+                                        <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-[#385e52]">#</th>
                                         <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-[#385e52]">Name</th>
                                         <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-[#385e52]">Email</th>
+                                        <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-[#385e52]">Registered On</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[#e8f4ee]">
-                                    @foreach ($event->users as $participant)
+                                    @foreach ($event->users as $i => $participant)
                                         <tr class="hover:bg-[#f8fdfb] transition-colors">
+                                            <td class="px-6 py-4 text-sm text-[#8aab9e]">{{ $i + 1 }}</td>
                                             <td class="px-6 py-4 text-sm font-semibold text-[#1b3a2f]">{{ $participant->name }}</td>
                                             <td class="px-6 py-4 text-sm text-[#385e52]">{{ $participant->email }}</td>
+                                            <td class="px-6 py-4 text-sm text-[#385e52]">{{ $participant->pivot->created_at?->format('M d, Y h:i A') ?? '—' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

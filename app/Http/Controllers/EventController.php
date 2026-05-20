@@ -109,7 +109,11 @@ class EventController extends Controller
         $event->loadCount('users');
 
         if ($currentUser->role === 'admin') {
-            $event->load('users:id,name,email');
+            $event->load(['users' => function ($query): void {
+                $query->select('users.id', 'users.name', 'users.email')
+                    ->withPivot('created_at')
+                    ->orderByPivot('created_at', 'asc');
+            }]);
         }
 
         $alreadyRegistered = $currentUser->events()

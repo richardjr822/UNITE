@@ -8,12 +8,7 @@ use App\Http\Controllers\ProfileController;
 // public auth routes (login, register) already handled by Breeze
 
 Route::get('/', function () {
-    $events = \App\Models\Event::where('status', 'scheduled')
-        ->where('date', '>=', now()->toDateString())
-        ->withCount('users')
-        ->orderBy('date')
-        ->get();
-    return view('welcome', compact('events'));
+    return view('welcome');
 })->name('home');
 
 Route::middleware(['auth'])->group(function () {

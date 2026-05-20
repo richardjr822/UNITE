@@ -122,9 +122,11 @@ php artisan test
 
 ## Group Members
 
-- Add member names here
-- Add member names here
-- Add member names here
+Richard Del Carmen Jr.   
+Larissa Eunice Panganiban   
+Francis Emil Rosete   
+Janico Gyle Sorio   
+Varnard Paulo Udani   
 
 ## Submission Checklist
 

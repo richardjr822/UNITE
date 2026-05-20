@@ -326,6 +326,58 @@
             background: #2f8e6f;
         }
 
+        /* Category preview cards */
+        .category-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: calc(8px * var(--scale));
+            padding: calc(18px * var(--scale)) calc(18px * var(--scale)) calc(14px * var(--scale));
+            min-height: calc(160px * var(--scale));
+            flex: 1 1 calc(200px * var(--scale));
+        }
+
+        .category-icon-wrap {
+            width: calc(48px * var(--scale));
+            height: calc(48px * var(--scale));
+            border-radius: calc(14px * var(--scale));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .category-icon-sports  { background: #e6f7f0; color: #1d7a58; }
+        .category-icon-academic { background: #e8f0fb; color: #2d5fbf; }
+        .category-icon-club    { background: #fdf0e6; color: #bf6b1a; }
+
+        .category-title {
+            margin: 0;
+            font-size: calc(15px * var(--scale));
+            font-weight: 800;
+            color: #111f1a;
+            line-height: 1.2;
+        }
+
+        .category-subtext {
+            margin: 0;
+            font-size: calc(12px * var(--scale));
+            color: #7a8f89;
+            line-height: 1.45;
+            flex: 1;
+        }
+
+        .category-cta {
+            margin-top: calc(4px * var(--scale));
+            font-size: calc(12px * var(--scale));
+            font-weight: 700;
+            color: var(--green-c);
+            text-decoration: none;
+            letter-spacing: 0.01em;
+        }
+
+        .category-cta:hover { text-decoration: underline; }
+
         .features-wrap {
             position: relative;
             z-index: 2;
@@ -547,6 +599,24 @@
                 min-width: 200px;
             }
 
+            .category-card {
+                flex: 1 1 160px;
+                min-width: 160px;
+                min-height: 148px;
+                padding: 14px 14px 12px;
+                gap: 6px;
+            }
+
+            .category-icon-wrap {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+
+            .category-title { font-size: .95rem; }
+            .category-subtext { font-size: .78rem; }
+            .category-cta { font-size: .78rem; }
+
             .event-top {
                 font-size: .9rem;
             }
@@ -633,25 +703,55 @@
     </div>
 
     <div class="events-wrap">
-        <p class="events-section-label">Upcoming Events</p>
-        <section class="events-panel" aria-label="Upcoming events preview">
+        <p class="events-section-label">This Week&rsquo;s Activities</p>
+        <section class="events-panel" aria-label="Event categories preview">
             <div class="events-header">
                 <span class="dot"></span>
                 <span class="dot"></span>
                 <span class="dot"></span>
             </div>
             <div class="events-grid">
-                @forelse ($events as $event)
-                <article class="event-card">
-                    <div class="event-top">
-                        <div class="date-pill">{{ strtoupper(\Carbon\Carbon::parse($event->date)->format('M')) }}<br>{{ \Carbon\Carbon::parse($event->date)->format('d') }}</div>
-                        <span>{{ $event->venue }}</span>
+
+                <article class="event-card category-card">
+                    <div class="category-icon-wrap category-icon-sports">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M19.07 4.93l-4.24 4.24M9.17 9.17L4.93 19.07"/>
+                        </svg>
                     </div>
-                    <h3 class="event-title">{{ $event->title }}</h3>
+                    <h3 class="category-title">Sports Events</h3>
+                    <p class="category-subtext">Login to see this week&rsquo;s scheduled activities.</p>
+                    <a href="{{ route('login') }}" class="category-cta">View Events &rsaquo;</a>
                 </article>
-                @empty
-                <p style="padding: 16px; color: #9ba19f; font-size: .85rem;">No upcoming events.</p>
-                @endforelse
+
+                <article class="event-card category-card">
+                    <div class="category-icon-wrap category-icon-academic">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M12 3L2 9l10 6 10-6-10-6z"/>
+                            <path d="M2 9v6"/>
+                            <path d="M22 9v6"/>
+                            <path d="M6 11.5v5.5a6 6 0 0012 0v-5.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="category-title">Academic Seminars</h3>
+                    <p class="category-subtext">Login to see this week&rsquo;s scheduled activities.</p>
+                    <a href="{{ route('login') }}" class="category-cta">View Events &rsaquo;</a>
+                </article>
+
+                <article class="event-card category-card">
+                    <div class="category-icon-wrap category-icon-club">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                    </div>
+                    <h3 class="category-title">Club Meetings</h3>
+                    <p class="category-subtext">Login to see this week&rsquo;s scheduled activities.</p>
+                    <a href="{{ route('login') }}" class="category-cta">View Events &rsaquo;</a>
+                </article>
+
             </div>
         </section>
     </div>
