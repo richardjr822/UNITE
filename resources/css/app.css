@@ -117,30 +117,31 @@
 	}
 
 	.student-canvas {
-		@apply rounded-[22px] p-5 md:p-6;
+		@apply rounded-[24px] p-5 md:p-7;
 		background:
-			radial-gradient(circle at 90% 8%, rgba(59, 184, 136, 0.28) 0 17%, transparent 18%),
-			radial-gradient(circle at 60% 72%, rgba(67, 191, 144, 0.22) 0 20%, transparent 21%),
-			radial-gradient(circle at 20% 28%, rgba(48, 154, 117, 0.21) 0 16%, transparent 17%),
-			linear-gradient(145deg, #8fbeb5 0%, #85b8ae 28%, #6ab998 72%, #62ba8f 100%);
-		box-shadow: 0 12px 28px rgba(28, 96, 76, 0.24);
+			radial-gradient(circle at 92% 9%, rgba(100, 210, 170, 0.4) 0 20%, transparent 21%),
+			radial-gradient(circle at 67% 76%, rgba(50, 180, 140, 0.35) 0 24%, transparent 25%),
+			radial-gradient(circle at 18% 24%, rgba(30, 140, 110, 0.3) 0 16%, transparent 17%),
+			linear-gradient(145deg, #1a8f6e 0%, #3ebd8a 45%, #0e6b54 100%);
+		box-shadow: 0 20px 35px rgba(30, 140, 110, 0.35);
+		min-height: 580px;
 	}
 
 	.student-title {
-		@apply text-3xl font-extrabold tracking-tight text-[#f6fbf9];
+		@apply text-3xl font-extrabold tracking-tight text-[#f6fbf9] md:text-4xl;
 	}
 
 	.student-subtitle {
-		@apply mt-1 text-base text-[#edf7f3];
+		@apply mt-1 text-sm text-[#edf7f3] md:text-base;
 	}
 
 	.student-pale-btn {
-		@apply rounded-lg bg-[#f5f8f6] px-5 py-2 text-sm font-semibold text-[#1f4f3f] shadow-md;
+		@apply rounded-xl bg-[#f5f8f6] px-5 py-2.5 text-sm font-semibold text-[#1f4f3f] shadow-md transition hover:bg-white;
 	}
 
 	.student-card {
-		@apply rounded-2xl bg-[#f5f7f6] p-4 md:p-5;
-		box-shadow: 0 10px 18px rgba(23, 75, 59, 0.18);
+		@apply rounded-2xl border border-[#d7e5df] bg-[#f8fbf9] p-5 md:p-6;
+		box-shadow: 0 14px 28px rgba(23, 75, 59, 0.14);
 	}
 
 	.student-kicker {
@@ -148,7 +149,7 @@
 	}
 
 	.student-event-title {
-		@apply mt-1 text-[2rem] font-extrabold leading-tight text-[#111f1b];
+		@apply mt-1 text-[1.75rem] font-extrabold leading-tight text-[#111f1b] md:text-[2rem];
 	}
 
 	.student-event-copy {
@@ -160,7 +161,7 @@
 	}
 
 	.student-event-action {
-		@apply mt-3 inline-flex rounded-full bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a] px-6 py-2 text-sm font-bold text-white shadow;
+		@apply mt-3 inline-flex items-center rounded-full bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a] px-6 py-2.5 text-sm font-bold text-white shadow transition hover:brightness-105;
 	}
 
 	.student-filter-bar {
@@ -198,7 +199,7 @@
 
 	/* Dashboard-only horizontal scroll event cards */
 	.dashboard-event-grid {
-		@apply flex flex-row gap-4 overflow-x-auto pb-2;
+		@apply grid gap-4 pb-2 sm:grid-cols-2 xl:grid-cols-3;
 		scrollbar-width: thin;
 		scrollbar-color: rgba(80,190,141,0.4) transparent;
 	}
@@ -213,11 +214,15 @@
 	}
 
 	.dashboard-event-card {
-		@apply flex flex-col rounded-2xl bg-white p-4;
-		box-shadow: 0 4px 16px rgba(23, 75, 59, 0.10);
-		flex: 0 0 260px;
-		min-width: 260px;
-		height: 320px;
+		@apply flex flex-col rounded-2xl border border-[#deebe5] bg-white p-4 md:p-5;
+		box-shadow: 0 10px 24px rgba(23, 75, 59, 0.1);
+		min-height: 320px;
+		transition: transform 0.22s ease, box-shadow 0.22s ease;
+	}
+
+	.dashboard-event-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 14px 28px rgba(23, 75, 59, 0.16);
 	}
 
 	.dashboard-event-title {
@@ -233,16 +238,16 @@
 	}
 
 	.admin-stat-card {
-		@apply rounded-2xl bg-[#f6f7f7] p-4 shadow;
-		box-shadow: 0 8px 16px rgba(23, 75, 59, 0.14);
+		@apply rounded-2xl border border-[#d6e5df] bg-[#f9fbfa] p-5 shadow;
+		box-shadow: 0 10px 20px rgba(23, 75, 59, 0.12);
 	}
 
 	.admin-stat-label {
-		@apply text-sm font-semibold uppercase tracking-[0.2em] text-[#2f7960];
+		@apply text-xs font-semibold uppercase tracking-[0.18em] text-[#2f7960];
 	}
 
 	.admin-stat-value {
-		@apply mt-3 text-3xl font-extrabold text-[#15241f];
+		@apply mt-2 text-3xl font-extrabold text-[#15241f];
 	}
 
 	.admin-tools-wrap {
@@ -338,19 +343,19 @@
 	}
 
 	.stat-icon-week {
-		@apply bg-[#e4f3ed] text-[#2f9b74];
+		@apply bg-[#e6f4ee] text-[#2f9b74];
 	}
 
 	.stat-icon-month {
-		@apply bg-[#dceef6] text-[#3b7ba8];
+		@apply bg-[#e8f2ef] text-[#2f8f70];
 	}
 
 	.stat-icon-upcoming {
-		@apply bg-[#ede4f3] text-[#8b5f9b];
+		@apply bg-[#e4f1ea] text-[#2b7f63];
 	}
 
 	.event-meta-item {
-		@apply mt-2 flex items-center gap-2 text-sm font-semibold text-[#2a3733];
+		@apply mt-2 flex items-center gap-2 text-sm font-semibold text-[#2f4a42];
 	}
 
 	.event-meta-grid {
@@ -362,11 +367,23 @@
 	}
 
 	.event-capacity-bar {
-		@apply mt-3 h-2 w-full rounded-full bg-[#e4efe9];
+		@apply mt-3 h-2 w-full rounded-full bg-[#e1ece7];
 	}
 
 	.event-capacity-fill {
 		@apply h-full rounded-full bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a];
+	}
+
+	@media (max-width: 639px) {
+		.dashboard-event-grid {
+			@apply flex flex-row overflow-x-auto;
+		}
+
+		.dashboard-event-card {
+			flex: 0 0 85%;
+			min-width: 85%;
+			min-height: 300px;
+		}
 	}
 
 	.mini-card-footer {
@@ -380,4 +397,210 @@
 	.capacity-icon {
 		@apply h-3.5 w-3.5 text-[#2f9b74];
 	}
+
+	/* Modern Dashboard Stat Cards */
+	.modern-stat-card {
+		@apply rounded-2xl border border-[#d6e5df] bg-white p-6 shadow transition hover:shadow-lg hover:border-[#b8d4cb];
+		box-shadow: 0 4px 12px rgba(23, 75, 59, 0.08);
+	}
+
+	.modern-stat-label {
+		@apply text-xs font-semibold uppercase tracking-[0.15em] text-[#5f746d];
+	}
+
+	.modern-stat-value {
+		@apply mt-3 text-4xl font-extrabold text-[#112a21];
+	}
+
+	/* Modern Icon Wrappers */
+	.stat-icon-large {
+		@apply flex h-12 w-12 items-center justify-center rounded-xl shadow-sm;
+	}
+
+	.stat-icon-blue {
+		@apply bg-gradient-to-br from-[#e3f2fd] to-[#bbdefb] text-[#1976d2];
+	}
+
+	.stat-icon-green {
+		@apply bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9] text-[#388e3c];
+	}
+
+	.stat-icon-purple {
+		@apply bg-gradient-to-br from-[#f3e5f5] to-[#e1bee7] text-[#7b1fa2];
+	}
+
+	.stat-icon-orange {
+		@apply bg-gradient-to-br from-[#ffe3b3] to-[#ffcc80] text-[#f57c00];
+	}
+
+	/* Featured Event Card */
+	.featured-event-card {
+		@apply rounded-2xl border border-[#d6e5df] bg-white p-4 md:p-6 shadow-lg;
+		box-shadow: 0 8px 24px rgba(23, 75, 59, 0.12);
+	}
+
+	.featured-event-header {
+		@apply mb-4 flex items-start justify-between;
+	}
+
+	.featured-event-header h3 {
+		@apply text-2xl font-bold text-[#112a21];
+	}
+
+	.featured-event-label {
+		@apply text-xs font-bold uppercase tracking-[0.15em] text-[#22755b];
+	}
+
+	.featured-event-title {
+		@apply mt-1 text-2xl font-bold tracking-tight text-[#112a21];
+	}
+
+	.featured-event-description {
+		@apply mt-2 text-xs text-[#5f746d];
+	}
+
+	.featured-event-badge {
+		@apply flex items-center gap-2;
+	}
+
+	.badge-label {
+		@apply inline-flex rounded-full bg-[#e8f5ee] px-3 py-1 text-xs font-bold text-[#2f9b74];
+	}
+
+	.featured-event-grid {
+		@apply mb-4 grid gap-3 md:grid-cols-4;
+	}
+
+	.featured-event-meta {
+		@apply flex items-center gap-2 rounded-lg bg-[#f3f7f5] p-3;
+	}
+
+	.meta-icon-wrapper {
+		@apply flex h-8 w-8 items-center justify-center rounded-lg bg-[#e8f5ee] text-[#2f9b74];
+	}
+
+	.meta-label {
+		@apply text-xs font-semibold text-[#5f746d] uppercase tracking-[0.1em];
+	}
+
+	.meta-value {
+		@apply mt-0.5 text-xs font-bold text-[#112a21];
+	}
+
+	.featured-event-progress {
+		@apply mb-4 rounded-lg bg-[#f8fbf9] p-3;
+	}
+
+	.progress-label {
+		@apply text-xs font-semibold text-[#2f4a42];
+	}
+
+	.progress-percentage {
+		@apply text-xs font-bold text-[#2f9b74];
+	}
+
+	.progress-bar {
+		@apply h-2 w-full rounded-full bg-[#e1ece7] mt-2;
+	}
+
+	.progress-fill {
+		@apply h-full rounded-full bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a] transition-all duration-500;
+	}
+
+	.progress-hint {
+		@apply mt-1 text-xs text-[#5f746d] font-medium;
+	}
+
+	.featured-event-actions {
+		@apply flex flex-col gap-2 md:flex-row;
+	}
+
+	.featured-event-btn {
+		@apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold transition duration-200;
+	}
+
+	.featured-event-btn-primary {
+		@apply bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a] text-white shadow-md hover:shadow-lg hover:brightness-105;
+	}
+
+	.featured-event-btn-secondary {
+		@apply border-2 border-[#d6e5df] bg-white text-[#2f9b74] hover:bg-[#f3f7f5];
+	}
+
+	/* Modern Event Grid */
+	.modern-event-grid {
+		@apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
+	}
+
+	.modern-event-card {
+		@apply flex flex-col rounded-2xl border border-[#d6e5df] bg-white p-5 transition hover:shadow-lg hover:border-[#b8d4cb];
+		box-shadow: 0 4px 12px rgba(23, 75, 59, 0.08);
+	}
+
+	.event-card-header {
+		@apply mb-4 flex items-start gap-3;
+	}
+
+	.event-date-badge {
+		@apply flex flex-col items-center justify-center rounded-lg bg-gradient-to-br from-[#4eb98a] to-[#2a8d6a] px-3 py-2 text-white shadow-md;
+		min-width: 52px;
+	}
+
+	.badge-month {
+		@apply text-xs font-bold uppercase leading-tight;
+	}
+
+	.badge-day {
+		@apply text-xl font-extrabold leading-tight;
+	}
+
+	.event-card-title {
+		@apply text-lg font-bold text-[#112a21];
+	}
+
+	.event-card-subtitle {
+		@apply mt-1 text-xs text-[#5f746d] font-medium;
+	}
+
+	.event-card-action {
+		@apply flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#f0f4f2] text-[#2f9b74] transition hover:bg-[#e1ece7] hover:text-[#2a8d6a];
+	}
+
+	.event-card-description {
+		@apply mb-4 text-sm text-[#5f746d] line-clamp-2;
+	}
+
+	.event-card-meta {
+		@apply mb-4 flex flex-col gap-2 space-y-2;
+	}
+
+	.meta-item {
+		@apply flex items-center gap-2 text-xs font-medium text-[#2f4a42];
+	}
+
+	.event-card-progress {
+		@apply mt-auto;
+	}
+
+	.progress-bar-small {
+		@apply mb-2 h-2 w-full rounded-full bg-[#e1ece7];
+	}
+
+	.progress-fill-small {
+		@apply h-full rounded-full bg-gradient-to-r from-[#4eb98a] to-[#2a8d6a] transition-all duration-500;
+	}
+
+	.progress-text {
+		@apply text-xs font-medium text-[#5f746d];
+	}
+
+	/* Event Meta Icon Wrapper */
+	.event-meta-icon-wrap {
+		@apply inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#e8f5ee] text-[#2f9b74];
+	}
+
+	.event-meta-icon {
+		@apply h-4 w-4;
+	}
 }
+
