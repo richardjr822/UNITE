@@ -188,7 +188,7 @@ class EventController extends Controller
     {
         $this->ensureAdmin();
 
-        $event->delete();
+        Event::destroy($event->id);
 
         return redirect()
             ->route('events.index')

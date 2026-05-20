@@ -35,12 +35,14 @@ class DashboardController extends Controller
         $endOfMonth = now()->endOfMonth();
 
         $eventsThisWeek = Event::query()
-            ->upcoming()
+            ->whereDate('date', '>=', now()->toDateString())
+            ->where('status', 'scheduled')
             ->whereBetween('date', [$startOfWeek->toDateString(), $endOfWeek->toDateString()])
             ->count();
 
         $eventsThisMonth = Event::query()
-            ->upcoming()
+            ->whereDate('date', '>=', now()->toDateString())
+            ->where('status', 'scheduled')
             ->whereBetween('date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()])
             ->count();
 
